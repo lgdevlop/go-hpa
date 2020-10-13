@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: go-hpa
+  name: go-hpa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-hpa
+  template:
+    metadata:
+      labels:
+        app: go-hpa
+    spec:
+      containers:
+      - name: go-hpa
+        image: lgdevlop/go-hpa:1.0.0
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "5Mi"
+          limits:
+            cpu: "100m"
+            memory: "10Mi"
+
+---
+
+apiVersion: autoscaling/v1 
+kind: HorizontalPodAutoscaler
+metadata:
+  name: go-hpa
+spec:
+  minReplicas: 1
+  maxReplicas: 6
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: go-hpa
+  targetCPUUtilizationPercentage: 15
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: go-hpa
+  name: go-hpa
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8000
+  selector:
+    app: go-hpa
