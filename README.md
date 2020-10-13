@@ -1,7 +1,7 @@
 GO-HPA
 ===================
 
-> Repositório de teste para containerização, deploy no kubernetes com **HPA** e CI/CD usando Google CloudBuild.
+> Repositório de teste para containerização, **deploy no kubernetes com HPA e CI/CD usando Google CloudBuild**.
 
 ## Imagem Hello World feita em Golang
 
